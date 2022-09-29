@@ -1,0 +1,63 @@
+Cenário do desafio
+Agora você trabalha com engenharia de dados na transportadora Flowlogistic. Parabéns pelo novo emprego!
+
+Contexto
+A mineradora Jasper Jasmine Mines é um cliente importante da Flowlogistic, que faz o transporte aéreo de equipamentos e peças para a mineradora. Em 2018, a Flowlogistic gerenciou mais de 8.000 voos para esse cliente. O arquivo de registros tem dados de todos esses voos, incluindo a data, a companhia aérea, a distância percorrida e a duração de cada um deles.
+
+Desafio
+Os analistas de dados precisam executar consultas em um registro de voos de transporte de carga. Sua tarefa é criar um conjunto de dados personalizado do BigQuery e executar uma série de consultas nele para demonstrar que ele pode ser usado pelos analistas.
+
+Tarefa 1: crie um conjunto de dados personalizado
+Crie um conjunto de dados personalizado no BigQuery chamado JasmineJasper.
+
+Crie uma tabela chamada triplog no conjunto de dados.
+
+Carregue os dados de origem na tabela.
+
+O arquivo de registros está no formato CSV. Ele foi compartilhado com você em um bucket do Cloud Storage: cloud-training/preppde/2018-JasperJasmineMines.csv
+
+Use o seguinte esquema:
+
+date: integer,origin: string,destination: string,airline: string,miles: float,minutes: integer,duration: string
+
+Dica: se você estiver usando a nova IU do BigQuery, selecione "Editar como texto" e cole o esquema acima.
+
+
+Tarefa 2: consulte o conjunto de dados
+No início de 2018, uma das companhias aéreas prometeu usar aviões novos e mais rápidos para todas as viagens que partiam do aeroporto de Heathrow, em Londres. Sua tarefa é criar duas consultas:
+
+A primeira precisa verificar se todas as companhias aéreas têm voos com duração semelhante saindo de outro aeroporto.
+
+A segunda consulta deve identificar se uma companhia aérea específica, a PlanePeople Air, cumpriu a promessa de usar aviões novos e mais rápidos para a Flowlogistic.
+
+Campos que você precisa conhecer:
+minutes é a duração em minutos de cada voo, desde a decolagem até a aterrissagem.
+origin e destination usam os códigos IATA de três caracteres para indicar os aeroportos.
+LHR: aeroporto de Londres Heathrow, Reino Unido
+FRA: aeroporto de Frankfurt, Alemanha
+KUL: aeroporto internacional de Kuala Lumpur, Malásia
+airline indica o nome da companhia aérea contratada pela Flowlogistic.
+Caso você use a nova IU da Web do BigQuery, a configuração padrão será o dialeto SQL padrão. No entanto, se você usar a interface da Web clássica, o padrão será o dialeto SQL legado. Nesse caso, defina a configuração como SQL padrão.
+
+Observação: pode levar algum tempo (cerca de 15 a 20 minutos) até que apareça a pontuação de uma consulta concluída.
+
+
+
+
+Primeira consulta
+Crie uma consulta que indique a duração média dos voos partindo do aeroporto de Frankfurt, Alemanha (FRA), com destino ao de Kuala Lumpur, Malásia (KUL). 
+Agrupe os resultados por companhia aérea. As durações médias devem ser semelhantes.
+
+select  origin, destination, airline, avg(minutes) as average_trip_time from   
+<nome da tabela` where   origin = 'FRA' and destination = 'KUL' 
+group by origin, destination, airline order by average_trip_time;
+
+
+Segunda consulta
+Crie uma consulta que indique a duração média dos voos partindo do aeroporto Heathrow de Londres, Reino Unido (LHR), com destino ao de Kuala Lumpur, 
+Malásia (KUL). Agrupe os resultados por companhia aérea, ordenados do menor para o maior. As durações médias encontradas indicarão se a companhia 
+aérea PlanePeople Air cumpriu a promessa de usar aviões mais rápidos no aeroporto de Heathrow.
+
+
+select airline, avg(minutes) as average_time, count(*) as totalnumberofflights from <nome da tabela>
+where origin = "LHR" and destination = "KUL" group by airline order by average_time asc
